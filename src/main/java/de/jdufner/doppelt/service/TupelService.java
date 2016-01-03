@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.jdufner.doppelt.domain.Tupel;
+import de.jdufner.doppelt.domain.Tupel.Groesse;
 
 @Service
 public class TupelService {
@@ -30,17 +31,24 @@ public class TupelService {
   }
 
   public Tupel getTupel() throws IOException {
-    Tupel tupel = new ObjectMapper().readValue(jsonFile.getInputStream(), Tupel.class);
+    Resource file = jsonFile;
+    Tupel tupel = new ObjectMapper().readValue(file.getInputStream(), Tupel.class);
     return tupel;
   }
 
-  public String tupelDatenKurz() throws IOException {
+  public Tupel getTupel(final Groesse groesse) throws IOException {
+    Resource file = resourceLoader.getResource(String.format("classpath:%d.json", groesse.getAnzahlElemente()));
+    Tupel tupel = new ObjectMapper().readValue(file.getInputStream(), Tupel.class);
+    return tupel;
+  }
+
+  private String tupelDatenKurz() throws IOException {
     Resource file = jsonFile;
     return new String(Files.readAllBytes(file.getFile().toPath()));
   }
 
-  public String tupelDatenLang() throws IOException {
-    Resource file = resourceLoader.getResource("classpath:8.json");
+  private String tupelDatenLang() throws IOException {
+    Resource file = jsonFile;
     InputStreamReader isr = new InputStreamReader(file.getInputStream());
     BufferedReader br = new BufferedReader(isr);
     StringBuilder sb = new StringBuilder();
@@ -50,6 +58,19 @@ public class TupelService {
       line = br.readLine();
     }
     return sb.toString();
+  }
+
+  int liefereZufallszahl(final int vonInklusive, final int bisExklusive) {
+    return vonInklusive + (int) (Math.random() * bisExklusive);
+  }
+
+  public Tupel mische(final Tupel tupel) {
+    int[][] sorted = tupel.getDaten();
+    int[][] shuffled = new int[sorted.length][sorted[0].length];
+    for (int i = 0; i < sorted.length; i++) {
+      //sorted[liefereZufallszahl(0, sorted.length)];
+    }
+    return null;
   }
 
 }
