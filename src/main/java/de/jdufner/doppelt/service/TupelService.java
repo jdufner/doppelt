@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,8 +15,10 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.jdufner.doppelt.domain.Karte;
 import de.jdufner.doppelt.domain.Tupel;
 import de.jdufner.doppelt.domain.Tupel.Groesse;
+import de.jdufner.doppelt.utils.NumberUtil;
 
 @Service
 public class TupelService {
@@ -60,17 +64,37 @@ public class TupelService {
     return sb.toString();
   }
 
-  int liefereZufallszahl(final int vonInklusive, final int bisExklusive) {
-    return vonInklusive + (int) (Math.random() * bisExklusive);
+  private List<Karte> erstelleSpielkarten(final Tupel tupel) {
+    List<Karte> karten = new ArrayList<Karte>();
+    int[][] daten = tupel.getDaten();
+    for (int i = 0; i < daten.length; i++) {
+      List<Integer> elemente = new ArrayList<Integer>();
+      for (int j = 0; j < daten[i].length; j++) {
+        elemente.add(daten[i][j]);
+      }
+      Karte karte = new Karte(elemente);
+      karten.add(karte);
+    }
+    return karten;
   }
 
-  public Tupel mische(final Tupel tupel) {
-    int[][] sorted = tupel.getDaten();
-    int[][] shuffled = new int[sorted.length][sorted[0].length];
-    for (int i = 0; i < sorted.length; i++) {
-      //sorted[liefereZufallszahl(0, sorted.length)];
+  private Karte getZufaelligeKarte(final List<Karte> karten) {
+    return karten.remove(NumberUtil.liefereZufallszahl(0, karten.size()));
+  }
+
+  private List<Karte> mischeSpielkarten(final List<Karte> karten) {
+    List<Karte> gemischteKarten = new ArrayList<Karte>();
+    int size = karten.size();
+    for (int i = 0; i < size; i++) {
+      Karte karte = getZufaelligeKarte(karten);
+      karte.mischeElemente();
+      gemischteKarten.add(karte);
     }
-    return null;
+    return gemischteKarten;
+  }
+
+  public List<Karte> erstelleUndMischeSpielekarten(final Tupel tupel) {
+    return mischeSpielkarten(erstelleSpielkarten(tupel));
   }
 
 }

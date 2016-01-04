@@ -1,9 +1,9 @@
 package de.jdufner.doppelt.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.offset;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +13,7 @@ import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import de.jdufner.doppelt.Application;
+import de.jdufner.doppelt.domain.Karte;
 import de.jdufner.doppelt.domain.Tupel;
 import de.jdufner.doppelt.domain.Tupel.Groesse;
 
@@ -62,26 +63,18 @@ public class TupelServiceIT {
     assertThat(tupel.getDaten()).isNotNull().hasSize(57).contains(new int[] { 1, 2, 3, 4, 5, 6, 7, 8 })
         .contains(new int[] { 8, 15, 21, 27, 33, 39, 45, 51 });
     assertThat(tupel.getDaten()).isNotNull().hasSize(Groesse.getByAnzahlElemente(tupel.getDaten()[0].length).getAnzahlKarten());
-    //    System.out.println(new ObjectMapper().writeValueAsString(tupel));
   }
 
   @Test
-  public void whenLiefereZufallszahlExpectGleichverteilung() {
+  public void whenMischeTupelExpectTupel() throws IOException {
     // arrange
-    final int ITERATIONEN = 10000;
-    final int LAENGE = 10;
-    int[] array = new int[LAENGE];
+    Tupel tupel = tupelService.getTupel();
 
     // act
-    for (int i = 1; i < ITERATIONEN; i++) {
-      array[tupelService.liefereZufallszahl(0, LAENGE)]++;
-    }
+    List<Karte> karten = tupelService.erstelleUndMischeSpielekarten(tupel);
 
     // assert
-    for (int i = 0; i < array.length; i++) {
-      double d = (double) array[i] / ITERATIONEN * LAENGE;
-      assertThat(d).isCloseTo(1, offset(0.1));
-    }
-
+    assertThat(karten).isNotNull().isNotEmpty();
   }
+
 }
