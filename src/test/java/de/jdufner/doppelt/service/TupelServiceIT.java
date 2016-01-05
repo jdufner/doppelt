@@ -26,37 +26,12 @@ public class TupelServiceIT {
   private TupelService tupelService;
 
   @Test
-  public void whenGetTupelAsStringExpectDatenGeladen() throws IOException {
-    // arrange
-
-    // act
-    String tupelAsString = tupelService.getTupelAsString();
-
-    // assert
-    assertThat(tupelAsString).contains("\"daten\"").contains("[1,2,3,4,5,6,7,8]").contains("[8,15,21,27,33,39,45,51]");
-  }
-
-  @Test
-  public void whenGetTupelExpectTupelGeladen() throws IOException {
-    // arrange
-
-    // act
-    Tupel tupel = tupelService.getTupel();
-
-    // assert
-    assertThat(tupel).isNotNull();
-    assertThat(tupel.getDaten()).isNotNull().hasSize(57).contains(new int[] { 1, 2, 3, 4, 5, 6, 7, 8 })
-        .contains(new int[] { 8, 15, 21, 27, 33, 39, 45, 51 });
-    assertThat(tupel.getDaten()).isNotNull().hasSize(Groesse.getByAnzahlElemente(tupel.getDaten()[0].length).getAnzahlKarten());
-    //    System.out.println(new ObjectMapper().writeValueAsString(tupel));
-  }
-
-  @Test
   public void whenGetTupelBySizeExpectTupelGeladen() throws IOException {
     // arrange
+    Groesse groesse = Groesse.EIGHT;
 
     // act
-    Tupel tupel = tupelService.getTupel(Groesse.EIGHT);
+    Tupel tupel = tupelService.getTupel(groesse);
 
     // assert
     assertThat(tupel).isNotNull();
@@ -66,12 +41,12 @@ public class TupelServiceIT {
   }
 
   @Test
-  public void whenMischeTupelExpectTupel() throws IOException {
+  public void whenLoadSpielkartenExpectSpielkartenGeladen() throws IOException {
     // arrange
-    Tupel tupel = tupelService.getTupel();
+    Groesse groesse = Groesse.EIGHT;
 
     // act
-    List<Karte> karten = tupelService.erstelleUndMischeSpielekarten(tupel);
+    List<Karte> karten = tupelService.loadSpielkarten(groesse);
 
     // assert
     assertThat(karten).isNotNull().isNotEmpty();
