@@ -28,14 +28,37 @@ public class SpielstandServiceIT {
   private SpielstandService spielstandService;
 
   @Test
-  public void test() throws IOException {
+  public void whenLoadSpielstandExpectSpielstandGeladen() throws IOException {
     // arrange
 
     // act
-    Spielstand spielstand = spielstandService.loadSpielstand();
+    Spielstand spielstand = spielstandService.initializeSpielstand();
 
     // assert
     assertThat(spielstand).isNotNull();
+  }
+
+  public void testCheckElement() throws IOException {
+    // arrange
+    Spielstand spielstandAlt = spielstandService.initializeSpielstand();
+
+    // act
+    Spielstand spielstandNeu = spielstandService.checkElement();
+
+    // assert
+    assertThat(spielstandNeu).isNotNull();
+  }
+
+  @Test
+  public void testSaveSpielstand() throws IOException {
+    // arrange
+    Spielstand spielstand = spielstandService.initializeSpielstand();
+
+    // act
+    Spielstand spielstandSaved = spielstandService.saveSpielstand(spielstand);
+
+    // assert
+    assertThat(spielstandSaved).isNotNull();
   }
 
 }

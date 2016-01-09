@@ -1,20 +1,46 @@
 package de.jdufner.doppelt.domain;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters.LocalDateTimeConverter;
 
 /**
  *
  * @author Jürgen Dufner
  * @since 1.0
  */
+@Entity
+@Table(name = "stich")
 public class Stich {
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "stch_id", unique = true, nullable = false)
+  private Integer id;
+  @Column(name = "stch_start", nullable = false)
+  @Convert(converter = LocalDateTimeConverter.class)
   private LocalDateTime start = LocalDateTime.now();
+  @Column(name = "stch_stop", nullable = true)
+  @Convert(converter = LocalDateTimeConverter.class)
   private LocalDateTime stop;
+  @Column(name = "stch_nr", nullable = true)
   private int nr;
-  private Duration zeit;
-  private Karte sharedElement;
+  @Column(name = "stch_dauer", nullable = true)
+  private Long dauer;
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "stch_elmt_id", nullable = true)
+  private Element sharedElement;
 
   public LocalDateTime getStart() {
     return start;
@@ -40,19 +66,19 @@ public class Stich {
     this.nr = nr;
   }
 
-  public Duration getZeit() {
-    return zeit;
+  public Long getDauer() {
+    return dauer;
   }
 
-  public void setZeit(final Duration zeit) {
-    this.zeit = zeit;
+  public void setDauer(final Long zeit) {
+    this.dauer = zeit;
   }
 
-  public Karte getSharedElement() {
+  public Element getSharedElement() {
     return sharedElement;
   }
 
-  public void setSharedElement(final Karte sharedElement) {
+  public void setSharedElement(final Element sharedElement) {
     this.sharedElement = sharedElement;
   }
 

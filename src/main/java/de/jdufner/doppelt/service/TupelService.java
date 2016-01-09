@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.jdufner.doppelt.domain.Element;
 import de.jdufner.doppelt.domain.Karte;
 import de.jdufner.doppelt.domain.Tupel;
 import de.jdufner.doppelt.domain.Tupel.Groesse;
@@ -32,9 +33,9 @@ public class TupelService {
     List<Karte> karten = new ArrayList<Karte>();
     int[][] daten = tupel.getDaten();
     for (int i = 0; i < daten.length; i++) {
-      List<Integer> elemente = new ArrayList<Integer>();
+      List<Element> elemente = new ArrayList<Element>();
       for (int j = 0; j < daten[i].length; j++) {
-        elemente.add(daten[i][j]);
+        elemente.add(new Element(daten[i][j]));
       }
       Karte karte = new Karte(elemente);
       karten.add(karte);

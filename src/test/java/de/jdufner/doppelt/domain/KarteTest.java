@@ -2,9 +2,6 @@ package de.jdufner.doppelt.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import org.junit.Test;
 
 /**
@@ -17,13 +14,14 @@ public class KarteTest {
   @Test
   public void whenMischeElementeExpectReihenfolgeDerElementeGeaendert() {
     // arrange
-    Karte karte = new Karte(new ArrayList<Integer>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8)));
+    Karte karte = new Karte(Element.buildList(1, 2, 3, 4, 5, 6, 7, 8));
 
     // act
     karte.mischeElemente();
 
     // assert
-    assertThat(karte.getElemente()).contains(1, 2, 3, 4, 5, 6, 7, 8);
+    assertThat(karte.getElemente()).contains(new Element(1), new Element(2), new Element(3), new Element(4), new Element(5),
+        new Element(6), new Element(7), new Element(8));
   }
 
 }
