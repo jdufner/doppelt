@@ -6,4 +6,6 @@ import de.jdufner.doppelt.domain.Spielstand;
 
 public interface SpielstandRepository extends JpaRepository<Spielstand, Integer> {
 
+  Spielstand findByEigentuemer(String eigentuemer);
+
 }

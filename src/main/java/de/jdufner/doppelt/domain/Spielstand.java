@@ -28,6 +28,8 @@ public class Spielstand {
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "spst_id", unique = true, nullable = false)
   private Integer id;
+  @Column(name = "spst_eigentuemer", unique = true, nullable = false)
+  private String eigentuemer;
   @ManyToMany(cascade = CascadeType.ALL)
   @JoinTable(name = "kartenvorrat", //
   joinColumns = { @JoinColumn(name = "kavo_spst_id", referencedColumnName = "spst_id") }, //
@@ -35,12 +37,28 @@ public class Spielstand {
   @OrderColumn(name = "kavo_order")
   private List<Karte> kartenvorrat;
   @Column(name = "spst_gesuchte_karte", unique = true, nullable = true)
-  private Integer gesuchteKarte = 0;
+  private Integer gesuchteKarteIndex = 0;
   @Column(name = "spst_private_karte", unique = true, nullable = true)
-  private Integer privateKarte = 1;
+  private Integer privateKarteIndex = 1;
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "stch_spst_id")
   private List<Stich> aktuelleStiche;
+
+  public Integer getId() {
+    return id;
+  }
+
+  public void setId(final Integer id) {
+    this.id = id;
+  }
+
+  public String getEigentuemer() {
+    return eigentuemer;
+  }
+
+  public void setEigentuemer(final String eigentuemer) {
+    this.eigentuemer = eigentuemer;
+  }
 
   public List<Karte> getKartenvorrat() {
     return kartenvorrat;
@@ -50,28 +68,37 @@ public class Spielstand {
     this.kartenvorrat = kartenvorrat;
   }
 
-  public Integer getGesuchteKarte() {
-    return gesuchteKarte;
+  public Integer getGesuchteKarteIndex() {
+    return gesuchteKarteIndex;
   }
 
-  public void setGesuchteKarte(final Integer gesuchteKarte) {
-    this.gesuchteKarte = gesuchteKarte;
+  public void setGesuchteKarteIndex(final Integer gesuchteKarteIndex) {
+    this.gesuchteKarteIndex = gesuchteKarteIndex;
   }
 
-  public Integer getPrivateKarte() {
-    return privateKarte;
+  public Integer getPrivateKarteIndex() {
+    return privateKarteIndex;
   }
 
-  public void setPrivateKarte(final Integer privateKarte) {
-    this.privateKarte = privateKarte;
+  public void setPrivateKarteIndex(final Integer privateKarteIndex) {
+    this.privateKarteIndex = privateKarteIndex;
   }
 
-  //  public List<Stich> getAktuelleStiche() {
-  //    return aktuelleStiche;
-  //  }
-  //
-  //  public void setAktuelleStiche(final List<Stich> aktuelleStiche) {
-  //    this.aktuelleStiche = aktuelleStiche;
-  //  }
+  public List<Stich> getAktuelleStiche() {
+    return aktuelleStiche;
+  }
+
+  public void setAktuelleStiche(final List<Stich> aktuelleStiche) {
+    this.aktuelleStiche = aktuelleStiche;
+  }
+
+  public Element getGemeinsamesElementVonGesuchterUndPrivaterKarte() {
+    for (Element element : kartenvorrat.get(gesuchteKarteIndex).getElemente()) {
+      if (kartenvorrat.get(privateKarteIndex).getElemente().contains(element)) {
+        return element;
+      }
+    }
+    return null;
+  }
 
 }
