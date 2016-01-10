@@ -5,12 +5,12 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
@@ -30,7 +30,7 @@ public class Spielstand {
   private Integer id;
   @Column(name = "spst_eigentuemer", unique = true, nullable = false)
   private String eigentuemer;
-  @ManyToMany(cascade = CascadeType.ALL)
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   @JoinTable(name = "kartenvorrat", //
   joinColumns = { @JoinColumn(name = "kavo_spst_id", referencedColumnName = "spst_id") }, //
   inverseJoinColumns = { @JoinColumn(name = "kavo_kart_id", referencedColumnName = "kart_id") })

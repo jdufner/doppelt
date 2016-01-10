@@ -20,6 +20,9 @@ import javax.persistence.Table;
 @Table(name = "element")
 public class Element {
 
+  static final String SEPARATOR = "|";
+  private static final String REGEXP = "\\" + SEPARATOR;
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "elmt_id", unique = true, nullable = false)
@@ -60,6 +63,32 @@ public class Element {
       elements.add(new Element(integers[i]));
     }
     return elements;
+  }
+
+  public static List<Element> buildList(final String elementsAsString) {
+    if (elementsAsString == null || elementsAsString.isEmpty()) {
+      return Collections.<Element> emptyList();
+    }
+    List<Element> elements = new ArrayList<Element>();
+    String[] elementsAsArray = elementsAsString.split(REGEXP);
+    for (int i = 0; i < elementsAsArray.length; i++) {
+      elements.add(new Element(Integer.parseInt(elementsAsArray[i])));
+    }
+    return elements;
+  }
+
+  public static String buildString(final List<Element> elements) {
+    if (elements == null) {
+      return "";
+    }
+    String elementsAsString = "";
+    for (Element element : elements) {
+      if (!elementsAsString.isEmpty()) {
+        elementsAsString += SEPARATOR;
+      }
+      elementsAsString += element.getWert();
+    }
+    return elementsAsString;
   }
 
   @Override

@@ -65,6 +65,7 @@ public class SpielstandServiceIT {
 
     // assert
     assertThat(spielstandSaved).isNotNull();
+    assertThat(spielstandSaved.getKartenvorrat()).isNotNull().hasSize(57);
   }
 
 }
