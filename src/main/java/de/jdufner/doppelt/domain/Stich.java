@@ -28,16 +28,21 @@ public class Stich {
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "stch_id", unique = true, nullable = false)
   private Integer id;
+
   @Column(name = "stch_start", nullable = false)
   @Convert(converter = LocalDateTimeConverter.class)
   private LocalDateTime start = LocalDateTime.now();
+
   @Column(name = "stch_stop", nullable = true)
   @Convert(converter = LocalDateTimeConverter.class)
   private LocalDateTime stop;
+
   @Column(name = "stch_nr", nullable = true)
   private int nr;
+
   @Column(name = "stch_dauer", nullable = true)
   private Long dauer;
+
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "stch_elmt_id", nullable = true)
   private Element sharedElement;

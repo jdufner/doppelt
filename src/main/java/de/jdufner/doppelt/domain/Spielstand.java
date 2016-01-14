@@ -28,18 +28,23 @@ public class Spielstand {
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "spst_id", unique = true, nullable = false)
   private Integer id;
+
   @Column(name = "spst_eigentuemer", unique = true, nullable = false)
   private String eigentuemer;
+
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   @JoinTable(name = "kartenvorrat", //
   joinColumns = { @JoinColumn(name = "kavo_spst_id", referencedColumnName = "spst_id") }, //
   inverseJoinColumns = { @JoinColumn(name = "kavo_kart_id", referencedColumnName = "kart_id") })
   @OrderColumn(name = "kavo_order")
   private List<Karte> kartenvorrat;
+
   @Column(name = "spst_gesuchte_karte", unique = true, nullable = true)
   private Integer gesuchteKarteIndex = 0;
+
   @Column(name = "spst_private_karte", unique = true, nullable = true)
   private Integer privateKarteIndex = 1;
+
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "stch_spst_id")
   private List<Stich> aktuelleStiche;

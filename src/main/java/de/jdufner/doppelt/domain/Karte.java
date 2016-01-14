@@ -39,11 +39,7 @@ public class Karte {
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "kart_id", unique = true, nullable = false)
   private Long id;
-  //  @OneToMany(cascade = CascadeType.ALL)
-  //  @JoinTable(name = "kartenelemente", //
-  //  joinColumns = { @JoinColumn(name = "kael_kart_id", referencedColumnName = "kart_id") }, //
-  //  inverseJoinColumns = { @JoinColumn(name = "kael_elmt_id", referencedColumnName = "elmt_id") })
-  //  @OrderColumn(name = "kael_order")
+
   @Column(name = "kart_elemente")
   @Type(type = ListOfElementUserType.NAME)
   private List<Element> elemente;
@@ -112,6 +108,7 @@ public class Karte {
       return Element.buildList(elementsAsString);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void nullSafeSet(final PreparedStatement st, final Object value, final int index, final SessionImplementor session)
         throws HibernateException, SQLException {
